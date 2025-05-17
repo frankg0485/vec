@@ -21,6 +21,8 @@ qt_add_qml_module(appvec
         SOURCES CanvasScene.cpp
         SOURCES CanvasSceneRenderer.h CanvasSceneRenderer.cpp
         RESOURCES vec.qrc
+        RESOURCES shader.vert
+        RESOURCES shader.frag
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

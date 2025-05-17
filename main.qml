@@ -16,7 +16,7 @@ Item {
     }
     Rectangle {
         color: Qt.rgba(1, 1, 1, 0.7)
-        radius: 10
+
         border.width: 1
         border.color: "red"
         anchors.fill: label

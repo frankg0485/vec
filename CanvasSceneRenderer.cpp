@@ -1,4 +1,7 @@
 #include "CanvasSceneRenderer.h"
+#include <fstream>
+#include <filesystem>
+#include <vector>
 
 void CanvasSceneRenderer::init()
 {
@@ -15,9 +18,29 @@ void CanvasSceneRenderer::init()
         m_vbo.allocate(values, sizeof(values));
 
         glEnableVertexAttribArray(0);
+
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), nullptr);
+        // attribute 0, two components per vertex, each component is float
+        // not normalized
+        // stride of two floats, 0 offset
+
 
         m_program = new QOpenGLShaderProgram();
+
+        // should not need absolute paths...
+        std::filesystem::path vert_path = "/Users/fgao/dev/vec/shader.vert";
+        std::filesystem::path frag_path = "/Users/fgao/dev/vec/shader.frag";
+
+        uintmax_t vert_size = std::filesystem::file_size(vert_path.string());
+        uintmax_t frag_size = std::filesystem::file_size(frag_path.string());
+        std::vector<char> vert(vert_size + 1);
+        std::vector<char> frag(frag_size + 1);
+
+
+        std::ifstream vertfile(vert_path.string());
+        std::ifstream fragfile(frag_path.string());
+        vertfile.read(vert.data(), vert_size);
+        fragfile.read(frag.data(), frag_size);
         m_program->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex,
                                                     "attribute highp vec4 vertices;"
                                                     "varying highp vec2 coords;"
@@ -36,6 +59,8 @@ void CanvasSceneRenderer::init()
                                                     "}");
 
         m_program->bindAttributeLocation("vertices", 0);
+        // vertices attribute is bounded to attribute 0
+
         m_program->link();
 
     }
